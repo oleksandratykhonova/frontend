@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін — PawGuard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner container">
+        <a href="index.html" class="logo">
+            <img src="https://placehold.co/30x30/e06000/ffffff?text=PG" alt="PawGuard" class="logo-img">
+            PawGuard
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Головна</a></li>
+                <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li><a href="admin.html" class="nav-link active">Адмін</a></li>
+            </ul>
+        </nav>
+        <div id="user-nav"></div>
+        <button id="theme-toggle" class="theme-toggle" title="Нічний режим">🌙</button>
+    </div>
+</header>
+
+<div id="server-banner"></div>
+
+<main>
+<div class="container">
+
+    <h1>Адмін-панель</h1>
+    <p id="admin-check">Перевірка прав доступу...</p>
+
+    <div id="admin-content" class="hidden">
+
+        <section id="stats-section">
+            <h2>Статистика</h2>
+            <div id="stats-grid" class="stats-grid">
+
+            </div>
+        </section>
+
+        <section id="users-section">
+            <h2>Користувачі</h2>
+            <div style="overflow-x:auto;">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Email</th>
+                            <th>Ім'я</th>
+                            <th>Роль</th>
+                            <th>Дата реєстрації</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="comments-section">
+            <h2>Відгуки</h2>
+            <div id="comments-list">
+
+            </div>
+        </section>
+
+    </div>
+
+</div>
+</main>
+
+<button id="support-btn" title="Підтримка">💬</button>
+<div id="support-tooltip" class="support-tooltip hidden">Потрібна допомога? Напишіть нам!</div>
+
+<footer id="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-col"><strong>PawGuard</strong></div>
+        <nav class="footer-col">
+            <h4>Навігація</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+            </ul>
+        </nav>
+        <div class="footer-col">
+            <h4>Контакти</h4>
+            <ul class="footer-links"><li>📧 info@pawguard.ua</li></ul>
+        </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2025 PawGuard.</p></div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

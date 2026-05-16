@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawGuard — Спортивне тренування собак</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner container">
+        <a href="index.html" class="logo">
+            <img src="https://placehold.co/30x30/e06000/ffffff?text=PG" alt="PawGuard" class="logo-img">
+            PawGuard
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Головна</a></li>
+                <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li><a href="course.html" class="nav-link">Курс</a></li>
+                <li><a href="react.html" class="nav-link">🌤 Погода</a></li>
+                <li><a href="spa.html" class="nav-link">🗂 SPA</a></li>
+                <li><a href="register.html" class="nav-link">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div id="user-nav">
+            <a href="register.html" class="btn">Увійти</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" title="Нічний режим">🌙</button>
+    </div>
+</header>
+
+<div id="server-banner"></div>
+
+<main>
+<div class="container">
+
+    <section>
+
+        <img src="images/agility.jpg" alt="Аджиліті" class="float-right" style="width:280px; border-radius:5px;">
+        <h1>PawGuard — тренування собак онлайн</h1>
+        <p>Платформа курсів зі спортивного тренування собак. Аджиліті, фрісбі, флайбол, обідієнс та інші дисципліни.</p>
+
+        <p><strong>Як почати:</strong></p>
+        <ol style="list-style: decimal; padding-left: 20px; margin-bottom: 14px;">
+            <li>Зареєструйся безкоштовно</li>
+            <li>Обери курс у каталозі</li>
+            <li>Тренуйся разом із собакою</li>
+        </ol>
+
+        <a href="catalog.html" class="btn">Переглянути курси</a>
+        <a href="register.html" class="btn btn-outline" style="margin-left: 8px;">Реєстрація</a>
+        <div class="clearfix"></div>
+    </section>
+
+    <section id="disciplines">
+        <h2>Дисципліни та ціни</h2>
+
+        <table id="pricing-table">
+            <thead>
+                <tr>
+                    <th>Дисципліна</th>
+                    <th>Рівень</th>
+                    <th>Тривалість</th>
+                    <th>Ціна</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Аджиліті</td>
+                    <td>Початківець</td>
+                    <td>8 тижнів</td>
+                    <td>1 200 грн</td>
+                </tr>
+                <tr>
+                    <td>Фрісбі</td>
+                    <td>Початківець</td>
+                    <td>6 тижнів</td>
+                    <td>980 грн</td>
+                </tr>
+                <tr>
+                    <td>Обідієнс</td>
+                    <td>Середній</td>
+                    <td>7 тижнів</td>
+                    <td>650 грн</td>
+                </tr>
+                <tr>
+                    <td>Каніcрос</td>
+                    <td>Початківець</td>
+                    <td>6 тижнів</td>
+                    <td>750 грн</td>
+                </tr>
+                <tr>
+                    <td>Флайбол</td>
+                    <td>Середній</td>
+                    <td>8 тижнів</td>
+                    <td>1 100 грн</td>
+                </tr>
+                <tr>
+                    <td>Шутцхунд</td>
+                    <td>Просунутий</td>
+                    <td>12 тижнів</td>
+                    <td>1 800 грн</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"><em>* Безстроковий доступ до відеоуроків після оплати</em></td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <section id="levels">
+        <h2>Обери свій рівень</h2>
+        <p>Клікни на рівень щоб перейти до відповідних курсів:</p>
+
+        <div class="map-container">
+            <img
+                src="https://placehold.co/800x100/222222/e06000?text=Початківець+|+Середній+|+Просунутий+|+Чемпіон"
+                alt="Рівні: Початківець, Середній, Просунутий, Чемпіон"
+                usemap="#levels-map"
+                width="800" height="100"
+                class="levels-img"
+            >
+            <map name="levels-map">
+                <area shape="rect" coords="0,0,200,100"   href="catalog.html" alt="Початківець">
+                <area shape="rect" coords="200,0,400,100" href="catalog.html" alt="Середній">
+                <area shape="rect" coords="400,0,600,100" href="catalog.html" alt="Просунутий">
+                <area shape="rect" coords="600,0,800,100" href="catalog.html" alt="Чемпіон">
+            </map>
+        </div>
+    </section>
+
+    <section id="subscribe">
+        <h2>Підписка на новини</h2>
+        <form id="subscribe-form" novalidate style="max-width: 400px;">
+            <div class="form-group">
+                <label for="sub-email">Ваш email</label>
+                <input type="email" id="sub-email" class="input-field" placeholder="example@mail.com" required>
+            </div>
+            <button type="submit" class="btn">Підписатися</button>
+            <p id="sub-msg" class="form-msg"></p>
+        </form>
+    </section>
+
+</div>
+</main>
+
+<button id="support-btn" title="Підтримка">💬</button>
+<div id="support-tooltip" class="support-tooltip hidden">Потрібна допомога? Напишіть нам!</div>
+
+<footer id="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-col">
+            <strong>PawGuard</strong>
+            <p style="font-size:0.82rem; margin-top:6px;">Платформа зі спортивного тренування собак.</p>
+        </div>
+        <nav class="footer-col">
+            <h4>Навігація</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="course.html">Курс</a></li>
+                <li><a href="register.html">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div class="footer-col">
+            <h4>Контакти</h4>
+            <ul class="footer-links">
+                <li>📧 info@pawguard.ua</li>
+                <li>📱 +38 (066) 000-00-00</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom container">
+        <p>&copy; 2025 PawGuard. Лабораторна робота з веб-програмування.</p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

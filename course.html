@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аджиліті для початківців — PawGuard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner container">
+        <a href="index.html" class="logo">
+            <img src="https://placehold.co/30x30/e06000/ffffff?text=PG" alt="PawGuard" class="logo-img">
+            PawGuard
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Головна</a></li>
+                <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li><a href="course.html" class="nav-link active">Курс</a></li>
+                <li><a href="react.html" class="nav-link">🌤 Погода</a></li>
+                <li><a href="spa.html" class="nav-link">🗂 SPA</a></li>
+                <li><a href="register.html" class="nav-link">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div id="user-nav"><a href="register.html" class="btn">Увійти</a></div>
+        <button id="theme-toggle" class="theme-toggle" title="Нічний режим">🌙</button>
+    </div>
+</header>
+
+<div id="server-banner"></div>
+
+<main>
+<div class="container">
+
+    <ul class="breadcrumb">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="catalog.html">Каталог</a></li>
+        <li>Аджиліті для початківців</li>
+    </ul>
+
+    <div class="course-top">
+
+        <img src="images/agility.jpg" alt="Аджиліті" class="float-right" style="width:300px; border-radius:4px;">
+        <h1>Аджиліті для початківців</h1>
+        <p><span class="tag">Аджиліті</span> <span class="tag">Початківець</span> <span class="tag">Онлайн</span></p>
+        <p>Базовий курс для собак та їхніх господарів. Навчитеся долати перешкоди: тунелі, слалом, стрибки, мост. Підходить для собак від 1 року.</p>
+        <p><strong>Тривалість:</strong> 8 тижнів &nbsp; <strong>Уроків:</strong> 24 &nbsp; <strong>Ціна:</strong> <span class="price">1 200 грн</span> <span class="price-old">1 800 грн</span></p>
+        <a href="register.html" class="btn">Записатися</a>
+        <div class="clearfix"></div>
+    </div>
+
+    <section id="lessons">
+        <h2>Програма курсу</h2>
+        <ol class="lesson-list">
+            <li>Введення в аджиліті. Обладнання та безпека.</li>
+            <li>Знайомство з тунелем. Перша спроба.</li>
+            <li>Слалом: базові вправи.</li>
+            <li>Стрибки через жердину.</li>
+            <li>Мост і хитка дошка.</li>
+            <li>Поєднання перешкод у прості маршрути.</li>
+            <li>Командна взаємодія та жести тренера.</li>
+            <li>Підсумковий маршрут і оцінювання.</li>
+        </ol>
+    </section>
+
+    <section id="reviews">
+        <h2>Відгуки</h2>
+
+        <div id="reviews-list"></div>
+
+        <h3>Залишити відгук</h3>
+        <form id="review-form" novalidate>
+            <div class="form-group">
+                <label for="r-name">Ваше ім'я</label>
+                <input type="text" id="r-name" class="input-field" placeholder="Ім'я" required>
+            </div>
+            <div class="form-group">
+                <label for="r-rating">Оцінка</label>
+                <select id="r-rating" class="input-field">
+                    <option value="5">★★★★★ (5)</option>
+                    <option value="4">★★★★☆ (4)</option>
+                    <option value="3">★★★☆☆ (3)</option>
+                    <option value="2">★★☆☆☆ (2)</option>
+                    <option value="1">★☆☆☆☆ (1)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="r-text">Відгук</label>
+                <textarea id="r-text" class="input-field" rows="4" placeholder="Напишіть ваш відгук..." required></textarea>
+                <span class="form-error" id="err-r-text"></span>
+            </div>
+            <button type="submit" class="btn">Надіслати відгук</button>
+            <p id="review-msg" class="form-msg"></p>
+        </form>
+    </section>
+
+</div>
+</main>
+
+<button id="support-btn" title="Підтримка">💬</button>
+<div id="support-tooltip" class="support-tooltip hidden">Потрібна допомога? Напишіть нам!</div>
+
+<footer id="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-col"><strong>PawGuard</strong></div>
+        <nav class="footer-col">
+            <h4>Навігація</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="register.html">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div class="footer-col">
+            <h4>Контакти</h4>
+            <ul class="footer-links"><li>📧 info@pawguard.ua</li></ul>
+        </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2025 PawGuard.</p></div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

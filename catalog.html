@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог курсів — PawGuard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner container">
+        <a href="index.html" class="logo">
+            <img src="https://placehold.co/30x30/e06000/ffffff?text=PG" alt="PawGuard" class="logo-img">
+            PawGuard
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Головна</a></li>
+                <li><a href="catalog.html" class="nav-link active">Каталог</a></li>
+                <li><a href="course.html" class="nav-link">Курс</a></li>
+                <li><a href="react.html" class="nav-link">🌤 Погода</a></li>
+                <li><a href="spa.html" class="nav-link">🗂 SPA</a></li>
+                <li><a href="register.html" class="nav-link">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div id="user-nav"><a href="register.html" class="btn">Увійти</a></div>
+        <button id="theme-toggle" class="theme-toggle" title="Нічний режим">🌙</button>
+    </div>
+</header>
+
+<div id="server-banner"></div>
+
+<main>
+<div class="container">
+
+    <ul class="breadcrumb">
+        <li><a href="index.html">Головна</a></li>
+        <li>Каталог курсів</li>
+    </ul>
+
+    <h1>Каталог курсів</h1>
+
+    <div class="catalog-layout">
+
+        <aside class="filter-panel">
+            <form id="filter-form">
+                <h3>Фільтри</h3>
+
+                <div class="form-group">
+                    <label for="search">Пошук</label>
+                    <input type="search" id="search" name="search" class="input-field" placeholder="Назва курсу...">
+                </div>
+
+                <div class="form-group">
+                    <label for="discipline">Дисципліна</label>
+                    <select id="discipline" name="discipline" class="input-field">
+                        <option value="">Всі дисципліни</option>
+                        <option value="agility">Аджиліті</option>
+                        <option value="frisbee">Фрісбі</option>
+                        <option value="flyball">Флайбол</option>
+                        <option value="obedience">Обідієнс</option>
+                        <option value="canicross">Каніcрос</option>
+                        <option value="schutzhund">Шутцхунд</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Рівень</label>
+                    <ul class="radio-list">
+                        <li><label><input type="radio" name="level" value="all" checked> Всі рівні</label></li>
+                        <li><label><input type="radio" name="level" value="beginner"> Початківець</label></li>
+                        <li><label><input type="radio" name="level" value="intermediate"> Середній</label></li>
+                        <li><label><input type="radio" name="level" value="advanced"> Просунутий</label></li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label>Формат</label>
+                    <label class="check-label"><input type="checkbox" name="format" value="online" checked> Онлайн</label>
+                    <label class="check-label"><input type="checkbox" name="format" value="offline"> Офлайн</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Ціна до: <strong><span id="price-val">2000</span> грн</strong></label>
+                    <input type="range" id="price" name="price" min="0" max="3000" value="2000" step="50">
+                </div>
+
+                <button type="submit" class="btn" style="width:100%;">Застосувати</button>
+                <button type="reset" class="btn btn-outline" id="reset-btn" style="width:100%; margin-top:8px;">Скинути</button>
+            </form>
+
+            <div class="widget">
+                <h4>Топ дисциплін</h4>
+                <ol class="top-list">
+                    <li>Аджиліті — 342 учні</li>
+                    <li>Обідієнс — 289 учнів</li>
+                    <li>Фрісбі — 198 учнів</li>
+                    <li>Флайбол — 134 учні</li>
+                    <li>Каніcрос — 87 учнів</li>
+                </ol>
+            </div>
+        </aside>
+
+        <section class="courses-section">
+            <div class="courses-toolbar">
+                <p>Знайдено: <strong id="course-count">6</strong> курсів</p>
+                <select id="sort-select" class="input-field" style="width:auto;">
+                    <option value="default">Сортування</option>
+                    <option value="price-asc">Ціна ↑</option>
+                    <option value="price-desc">Ціна ↓</option>
+                </select>
+            </div>
+
+            <article class="course-card course-card-wide" data-price="1200" data-level="beginner" data-disc="agility">
+                <div class="card-img-wrap">
+                    <img src="images/agility.jpg" alt="Аджиліті" class="card-img float-left">
+                    <span class="card-badge">🔥 Хіт</span>
+                </div>
+                <div class="card-body">
+                    <span class="tag">Аджиліті</span>
+                    <span class="tag">Початківець</span>
+                    <h3><a href="course.html">Аджиліті для початківців</a></h3>
+                    <p>Базові перешкоди, команди, техніка безпеки.</p>
+                    <div class="card-footer">
+                        <strong class="price">1 200 грн <span class="price-old">1 800 грн</span></strong>
+                        <a href="course.html" class="btn btn-sm">Детальніше</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </article>
+
+            <div class="courses-grid" id="courses-grid">
+
+                <article class="course-card" data-price="980" data-level="beginner" data-disc="frisbee">
+                    <div class="card-img-wrap">
+                        <img src="images/frisbee.jpg" alt="Фрісбі" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <span class="tag">Фрісбі</span>
+                        <h3><a href="course.html">Фрісбі: диск і собака</a></h3>
+                        <p>Навчіть собаку ловити і приносити фрісбі.</p>
+                        <div class="card-footer">
+                            <strong class="price">980 грн</strong>
+                            <a href="course.html" class="btn btn-sm">Детальніше</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-price="650" data-level="intermediate" data-disc="obedience">
+                    <div class="card-img-wrap">
+                        <img src="images/agility2.jpg" alt="Обідієнс" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <span class="tag">Обідієнс</span>
+                        <h3><a href="course.html">Обідієнс: послух і дисципліна</a></h3>
+                        <p>Класичний курс послуху — команди, витримка.</p>
+                        <div class="card-footer">
+                            <strong class="price">650 грн</strong>
+                            <a href="course.html" class="btn btn-sm">Детальніше</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-price="750" data-level="beginner" data-disc="canicross">
+                    <div class="card-img-wrap">
+                        <img src="images/canicross.jpg" alt="Каніcрос" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <span class="tag">Каніcрос</span>
+                        <h3><a href="course.html">Каніcрос: бігти разом</a></h3>
+                        <p>Спільний біг людини і собаки.</p>
+                        <div class="card-footer">
+                            <strong class="price">750 грн</strong>
+                            <a href="course.html" class="btn btn-sm">Детальніше</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-price="1100" data-level="intermediate" data-disc="flyball">
+                    <div class="card-img-wrap">
+                        <img src="images/flyball.jpg" alt="Флайбол" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <span class="tag">Флайбол</span>
+                        <h3><a href="course.html">Флайбол: швидкість і м'яч</a></h3>
+                        <p>Командна естафета з м'ячем.</p>
+                        <div class="card-footer">
+                            <strong class="price">1 100 грн</strong>
+                            <a href="course.html" class="btn btn-sm">Детальніше</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="course-card" data-price="1800" data-level="advanced" data-disc="schutzhund">
+                    <div class="card-img-wrap">
+                        <img src="images/schutzhund.jpg" alt="Шутцхунд" class="card-img">
+                        <span class="card-badge">PRO</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="tag">Шутцхунд</span>
+                        <h3><a href="course.html">Шутцхунд: захист і спорт</a></h3>
+                        <p>Треккінг, послух, захисна робота.</p>
+                        <div class="card-footer">
+                            <strong class="price">1 800 грн</strong>
+                            <a href="course.html" class="btn btn-sm">Детальніше</a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <p id="no-results" class="hidden">Нічого не знайдено. Спробуй змінити фільтри.</p>
+        </section>
+
+    </div>
+</div>
+</main>
+
+<button id="support-btn" title="Підтримка">💬</button>
+<div id="support-tooltip" class="support-tooltip hidden">Потрібна допомога? Напишіть нам!</div>
+
+<footer id="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-col"><strong>PawGuard</strong></div>
+        <nav class="footer-col">
+            <h4>Навігація</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="register.html">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div class="footer-col">
+            <h4>Контакти</h4>
+            <ul class="footer-links"><li>📧 info@pawguard.ua</li></ul>
+        </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2025 PawGuard.</p></div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

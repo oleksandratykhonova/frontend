@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курси SPA — PawGuard</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin defer></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin defer></script>
+    <script src="https://unpkg.com/react-router-dom@5.3.4/umd/react-router-dom.min.js" crossorigin defer></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+
+    <style>
+        .spa-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            min-height: 400px;
+            margin-top: 20px;
+        }
+        .spa-sidebar {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 0;
+            align-self: start;
+            background: #fafafa;
+        }
+        .spa-nav-link {
+            display: block;
+            padding: 9px 16px;
+            color: #444;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+        .spa-nav-link:hover { background: #fff3ee; border-left-color: #e06000; color: #e06000; }
+        .spa-nav-link.active-route { background: #fff3ee; border-left-color: #e06000; color: #e06000; font-weight: bold; }
+        .spa-content { padding: 0 0 0 20px; }
+        .spa-courses-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .spa-course-card { border: 1px solid #ddd; border-radius: 5px; overflow: hidden; cursor: pointer; background: #fff; }
+        .spa-course-card:hover { border-color: #e06000; }
+        .spa-course-card img { width: 100%; height: 130px; object-fit: cover; display: block; }
+        .spa-card-body { padding: 10px 12px; }
+        .spa-card-body h3 { font-size: 0.9rem; margin-bottom: 6px; }
+        .back-btn { background: none; border: none; color: #e06000; cursor: pointer; font-size: 0.88rem; margin-bottom: 14px; padding: 0; }
+        .back-btn:hover { text-decoration: underline; }
+        .counter-block { border: 1px solid #ddd; border-radius: 5px; padding: 16px; text-align: center; margin-bottom: 20px; }
+        .counter-num { font-size: 2.5rem; font-weight: bold; color: #e06000; display: block; }
+        .counter-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .filter-chip { padding: 5px 14px; border: 1px solid #ddd; border-radius: 20px; background: #fff; font-size: 0.82rem; cursor: pointer; }
+        .filter-chip:hover, .filter-chip.active { border-color: #e06000; background: #e06000; color: #fff; }
+        .error-msg { background: #fff5f5; border: 1px solid #e06000; color: #c00; padding: 12px; border-radius: 4px; }
+        @media (max-width: 600px) {
+            .spa-layout { grid-template-columns: 1fr; }
+            .spa-sidebar { display: flex; flex-wrap: wrap; }
+            .spa-content { padding: 16px 0 0; }
+            .spa-courses-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner container">
+        <a href="index.html" class="logo">
+            <img src="https://placehold.co/30x30/e06000/ffffff?text=PG" alt="PawGuard" class="logo-img">
+            PawGuard
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Головна</a></li>
+                <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li><a href="course.html" class="nav-link">Курс</a></li>
+                <li><a href="react.html" class="nav-link">🌤 Погода</a></li>
+                <li><a href="spa.html" class="nav-link active">🗂 SPA</a></li>
+                <li><a href="register.html" class="nav-link">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div id="user-nav"></div>
+        <button id="theme-toggle" class="theme-toggle" title="Нічний режим">🌙</button>
+    </div>
+</header>
+
+<div id="server-banner"></div>
+
+<div id="root"></div>
+
+<footer id="site-footer">
+    <div class="footer-bottom container">
+        <p>&copy; 2025 PawGuard. SPA з React Router.</p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script type="text/babel">
+
+const { useState, useEffect } = React;
+const { HashRouter, Route, Switch, Link, useParams, useHistory } = ReactRouterDOM;
+
+function CatalogPage() {
+    const [courses, setCourses]   = useState([]);
+    const [loading, setLoading]   = useState(true);
+    const [error, setError]       = useState('');
+    const [discipline, setDisc]   = useState('');
+    const history = useHistory();
+
+    const discs  = ['', 'agility', 'frisbee', 'obedience', 'canicross', 'flyball', 'schutzhund'];
+    const labels = { '': 'Всі', agility: 'Аджиліті', frisbee: 'Фрісбі',
+                     obedience: 'Обідієнс', canicross: 'Каніcрос',
+                     flyball: 'Флайбол', schutzhund: 'Шутцхунд' };
+
+    useEffect(() => {
+        setLoading(true);
+        const url = '/api/courses' + (discipline ? '?discipline=' + discipline : '');
+        fetch(url)
+            .then(r => r.json())
+            .then(data => { setCourses(data.courses || []); setLoading(false); })
+            .catch(() => { setError('Сервер недоступний. Запустіть: npm start'); setLoading(false); });
+    }, [discipline]);
+
+    return (
+        <div>
+            <h2>Каталог курсів</h2>
+
+            <div className="filter-bar">
+                {discs.map(d => (
+                    <button key={d} className={'filter-chip' + (discipline === d ? ' active' : '')}
+                        onClick={() => setDisc(d)}>
+                        {labels[d]}
+                    </button>
+                ))}
+            </div>
+
+            {loading && <p style={{color:'#888'}}>Завантаження...</p>}
+            {error && <div className="error-msg">{error}</div>}
+
+            {!loading && !error && (
+                <div className="spa-courses-grid">
+                    {courses.map(c => (
+                        <div key={c.id} className="spa-course-card"
+                             onClick={() => history.push('/course/' + c.id)}>
+                            <img src={c.image} alt={c.title} />
+                            <div className="spa-card-body">
+                                <span className="tag">{c.discipline}</span>
+                                <h3>{c.title}</h3>
+                                <span className="price">{c.price} грн</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function CourseDetailPage() {
+    const { id } = useParams();
+    const history = useHistory();
+    const [course, setCourse] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/courses')
+            .then(r => r.json())
+            .then(data => {
+                setCourse((data.courses || []).find(c => c.id === id) || null);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, [id]);
+
+    if (loading) return <p style={{color:'#888'}}>Завантаження...</p>;
+    if (!course) return <div><button className="back-btn" onClick={() => history.goBack()}>← Назад</button><p>Курс не знайдено.</p></div>;
+
+    return (
+        <div>
+            <button className="back-btn" onClick={() => history.goBack()}>← Назад до каталогу</button>
+            <h2>{course.title}</h2>
+            <img src={course.image} alt={course.title} style={{width:'100%', maxWidth:'400px', borderRadius:'4px', margin:'10px 0'}} />
+            <p><span className="tag">{course.discipline}</span></p>
+            <p style={{color:'#555'}}>{course.description}</p>
+            <p><strong>Ціна:</strong> <span className="price">{course.price} грн</span></p>
+            <p><strong>Тривалість:</strong> {course.weeks} тижнів</p>
+            <p><strong>Тренер:</strong> {course.trainer}</p>
+            <a href="register.html" className="btn" style={{marginTop:'10px', display:'inline-block'}}>Записатися</a>
+        </div>
+    );
+}
+
+class Counter extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: 0 };
+        this.minus = this.minus.bind(this);
+    }
+    plus()  { this.setState(s => ({ value: s.value + 1 })); }
+    minus() { this.setState(s => ({ value: s.value - 1 })); }
+    render() {
+        return (
+            <div className="counter-block">
+                <p style={{marginBottom:'6px', color:'#666', fontSize:'0.88rem'}}>Демонстрація state у React</p>
+                <span className="counter-num">{this.state.value}</span>
+                <div className="counter-controls">
+                    <button className="btn btn-outline" onClick={this.minus}>−</button>
+                    <button className="btn" onClick={() => this.plus()}>+</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+function AboutPage() {
+    const [stats, setStats] = useState(null);
+
+    useEffect(() => {
+        fetch('/api/stats')
+            .then(r => r.json())
+            .then(data => setStats(data))
+            .catch(() => {});
+    }, []);
+
+    return (
+        <div>
+            <h2>Про PawGuard</h2>
+            <Counter />
+
+            {stats && (
+                <div style={{border:'1px solid #ddd', borderRadius:'5px', padding:'14px', marginBottom:'16px'}}>
+                    <h3 style={{marginBottom:'10px'}}>Статистика (з сервера)</h3>
+                    <p>Курсів: <strong>{stats.totalCourses}</strong></p>
+                    <p>Студентів: <strong>{stats.totalUsers}</strong></p>
+                    <p>Відгуків: <strong>{stats.totalComments}</strong></p>
+                </div>
+            )}
+
+            <p style={{color:'#555'}}>
+                Це SPA — Single Page Application. Навігація між розділами відбувається
+                без перезавантаження сторінки завдяки React Router (HashRouter).
+                Дані курсів та статистики підвантажуються через AJAX-запити до власного
+                REST API на Node.js + Express.
+            </p>
+        </div>
+    );
+}
+
+function SidebarNav() {
+    const links = [
+        { to: '/',      label: '📚 Каталог', exact: true },
+        { to: '/about', label: 'ℹ️ Про платформу' },
+    ];
+    return (
+        <aside className="spa-sidebar">
+            {links.map(link => (
+                <ReactRouterDOM.Route key={link.to} path={link.to} exact={link.exact}>
+                    {({ match }) => (
+                        <Link to={link.to} className={'spa-nav-link' + (match ? ' active-route' : '')}>
+                            {link.label}
+                        </Link>
+                    )}
+                </ReactRouterDOM.Route>
+            ))}
+        </aside>
+    );
+}
+
+function App() {
+    return (
+        <HashRouter>
+            <div className="container" style={{paddingBottom:'40px'}}>
+                <div className="spa-layout">
+                    <SidebarNav />
+                    <main className="spa-content">
+                        <Switch>
+                            <Route path="/course/:id" component={CourseDetailPage} />
+                            <Route path="/about" component={AboutPage} />
+                            <Route exact path="/" component={CatalogPage} />
+                        </Switch>
+                    </main>
+                </div>
+            </div>
+        </HashRouter>
+    );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода для тренувань — PawGuard</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin defer></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin defer></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+
+    <style>
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .weather-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 14px;
+            text-align: center;
+            background: #fff;
+        }
+        .weather-card.today { border-color: #e06000; background: #fff8f5; }
+        .weather-card:hover { border-color: #e06000; }
+        .weather-icon { font-size: 2rem; display: block; margin: 8px 0; }
+        .temp-max { font-size: 1.4rem; font-weight: bold; color: #e06000; }
+        .temp-min { font-size: 0.85rem; color: #888; display: block; margin-bottom: 6px; }
+        .city-form { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .city-form input { flex: 1; min-width: 200px; padding: 8px 10px; border: 1px solid #bbb; border-radius: 4px; font-size: 0.9rem; }
+        .city-form input:focus { border-color: #e06000; outline: none; }
+        .quick-cities { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .quick-city-btn { padding: 5px 14px; border: 1px solid #ddd; border-radius: 20px; background: #fff; font-size: 0.82rem; cursor: pointer; }
+        .quick-city-btn:hover, .quick-city-btn.active { border-color: #e06000; background: #e06000; color: #fff; }
+        .error-block { background: #fff5f5; border: 1px solid #e06000; border-radius: 5px; padding: 16px; text-align: center; color: #c00; }
+        @media (max-width: 768px) { .weather-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .weather-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner container">
+        <a href="index.html" class="logo">
+            <img src="https://placehold.co/30x30/e06000/ffffff?text=PG" alt="PawGuard" class="logo-img">
+            PawGuard
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Головна</a></li>
+                <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li><a href="course.html" class="nav-link">Курс</a></li>
+                <li><a href="react.html" class="nav-link active">🌤 Погода</a></li>
+                <li><a href="spa.html" class="nav-link">🗂 SPA</a></li>
+                <li><a href="register.html" class="nav-link">Реєстрація</a></li>
+            </ul>
+        </nav>
+        <div id="user-nav"><a href="register.html" class="btn">Увійти</a></div>
+        <button id="theme-toggle" class="theme-toggle" title="Нічний режим">🌙</button>
+    </div>
+</header>
+
+<div id="server-banner"></div>
+
+<div id="root">
+    <p style="padding:40px; text-align:center;">Завантаження React...</p>
+</div>
+
+<footer id="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-col"><strong>PawGuard</strong></div>
+        <nav class="footer-col">
+            <h4>Навігація</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+            </ul>
+        </nav>
+        <div class="footer-col">
+            <h4>Дані</h4>
+            <ul class="footer-links"><li>open-meteo.com</li></ul>
+        </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2025 PawGuard.</p></div>
+</footer>
+
+<script type="text/babel">
+
+const WMO = {
+    0:  { icon: '☀️',  desc: 'Ясно' },
+    1:  { icon: '🌤️', desc: 'Переважно ясно' },
+    2:  { icon: '⛅',  desc: 'Мінлива хмарність' },
+    3:  { icon: '☁️',  desc: 'Похмуро' },
+    45: { icon: '🌫️', desc: 'Туман' },
+    51: { icon: '🌦️', desc: 'Мряка' },
+    61: { icon: '🌧️', desc: 'Дощ' },
+    63: { icon: '🌧️', desc: 'Помірний дощ' },
+    65: { icon: '🌧️', desc: 'Сильний дощ' },
+    71: { icon: '🌨️', desc: 'Сніг' },
+    73: { icon: '❄️',  desc: 'Сніг' },
+    80: { icon: '🌦️', desc: 'Зливи' },
+    95: { icon: '⛈️',  desc: 'Гроза' },
+};
+
+const DAYS = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+const CITIES = [
+    { name: 'Київ',   lat: 50.45, lon: 30.52 },
+    { name: 'Львів',  lat: 49.84, lon: 24.02 },
+    { name: 'Одеса',  lat: 46.48, lon: 30.73 },
+    { name: 'Харків', lat: 49.99, lon: 36.23 },
+];
+
+function WeatherCard({ date, tempMax, tempMin, weatherCode, isToday }) {
+    const w = WMO[weatherCode] || { icon: '🌡️', desc: '—' };
+    const day = isToday ? 'Сьогодні' : DAYS[new Date(date).getDay()];
+
+    return (
+        <div className={'weather-card' + (isToday ? ' today' : '')}>
+            <div style={{fontSize:'0.8rem', color:'#888'}}>{day}</div>
+            <span className="weather-icon">{w.icon}</span>
+            <span className="temp-max">{Math.round(tempMax)}°</span>
+            <span className="temp-min">мін {Math.round(tempMin)}°</span>
+            <div style={{fontSize:'0.78rem', color:'#666'}}>{w.desc}</div>
+        </div>
+    );
+}
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: null,
+            cityName: '',
+            activeCity: 'Київ',
+            loading: false,
+            error: '',
+            inputValue: '',
+        };
+
+        this.fetchByCoords = this.fetchByCoords.bind(this);
+        this.fetchByName   = this.fetchByName.bind(this);
+        this.handleInput   = this.handleInput.bind(this);
+        this.handleSearch  = this.handleSearch.bind(this);
+    }
+
+    componentDidMount() {
+        this.fetchByCoords(50.45, 30.52, 'Київ');
+    }
+
+    fetchByCoords(lat, lon, name) {
+        this.setState({ loading: true, error: '' });
+
+        const url =
+            'https://api.open-meteo.com/v1/forecast' +
+            '?latitude=' + lat + '&longitude=' + lon +
+            '&daily=temperature_2m_max,temperature_2m_min,weather_code' +
+            '&timezone=Europe/Kyiv&forecast_days=7';
+
+        fetch(url)
+            .then(function(r) {
+                if (!r.ok) throw new Error('Помилка: ' + r.status);
+                return r.json();
+            })
+            .then(function(data) {
+                this.setState({ data: data, cityName: name, loading: false });
+            }.bind(this))
+            .catch(function() {
+                this.setState({ error: 'Не вдалося завантажити дані. Перевірте інтернет.', loading: false });
+            }.bind(this));
+    }
+
+    fetchByName(name) {
+        this.setState({ loading: true, error: '', activeCity: '' });
+
+        const url = 'https://geocoding-api.open-meteo.com/v1/search?name=' +
+            encodeURIComponent(name) + '&count=1&language=uk&format=json';
+
+        fetch(url)
+            .then(function(r) { return r.json(); })
+            .then(function(geo) {
+                if (!geo.results || !geo.results.length) {
+                    throw new Error('Місто "' + name + '" не знайдено');
+                }
+                var c = geo.results[0];
+                this.fetchByCoords(c.latitude, c.longitude, c.name);
+            }.bind(this))
+            .catch(function(err) {
+                this.setState({ error: err.message, loading: false });
+            }.bind(this));
+    }
+
+    handleInput(e) {
+        this.setState({ inputValue: e.target.value });
+    }
+
+    handleSearch(e) {
+        e.preventDefault();
+        if (this.state.inputValue.trim()) {
+            this.fetchByName(this.state.inputValue.trim());
+        }
+    }
+
+    render() {
+        var state = this.state;
+
+        return (
+            <main style={{padding: '20px 0 40px'}}>
+                <div className="container">
+                    <h1>🌤 Погода для тренувань</h1>
+                    <p style={{marginBottom: '16px', color: '#666'}}>
+                        Перевір прогноз на 7 днів перед тренуванням з собакою
+                    </p>
+
+                    {}
+                    <form className="city-form" onSubmit={this.handleSearch}>
+                        <input
+                            type="text"
+                            value={state.inputValue}
+                            onChange={this.handleInput}
+                            placeholder="Введіть назву міста..."
+                            disabled={state.loading}
+                        />
+                        <button type="submit" className="btn" disabled={state.loading}>
+                            {state.loading ? 'Завантаження...' : 'Шукати'}
+                        </button>
+                    </form>
+
+                    {}
+                    <div className="quick-cities">
+                        {CITIES.map(function(c) {
+                            return (
+                                <button
+                                    key={c.name}
+                                    className={'quick-city-btn' + (state.activeCity === c.name ? ' active' : '')}
+                                    onClick={function() {
+                                        this.setState({ activeCity: c.name });
+                                        this.fetchByCoords(c.lat, c.lon, c.name);
+                                    }.bind(this)}
+                                    disabled={state.loading}
+                                >
+                                    {c.name}
+                                </button>
+                            );
+                        }.bind(this))}
+                    </div>
+
+                    {}
+                    {state.loading && <p style={{color:'#888'}}>⏳ Завантаження даних...</p>}
+
+                    {state.error && (
+                        <div className="error-block">{state.error}</div>
+                    )}
+
+                    {!state.loading && !state.error && state.data && (
+                        <div>
+                            <p style={{marginBottom:'10px', color:'#555'}}>
+                                Прогноз для: <strong>{state.cityName}</strong>
+                            </p>
+                            <div className="weather-grid">
+                                {state.data.daily.time.map(function(date, i) {
+                                    return (
+                                        <WeatherCard
+                                            key={date}
+                                            date={date}
+                                            tempMax={state.data.daily.temperature_2m_max[i]}
+                                            tempMin={state.data.daily.temperature_2m_min[i]}
+                                            weatherCode={state.data.daily.weather_code[i]}
+                                            isToday={i === 0}
+                                        />
+                                    );
+                                })}
+                            </div>
+                            <p style={{fontSize:'0.75rem', color:'#aaa', marginTop:'16px', textAlign:'center'}}>
+                                Дані: <a href="https://open-meteo.com" target="_blank" style={{color:'#e06000'}}>open-meteo.com</a> (безкоштовно)
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </main>
+        );
+    }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+</script>
+</body>
+</html>

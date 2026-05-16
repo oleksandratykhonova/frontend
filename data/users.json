@@ -1,0 +1,10 @@
+[
+  {
+    "id": "1",
+    "name": "Адміністратор",
+    "email": "admin@pawguard.ua",
+    "password": "$2a$10$w.N7zkvnfG7hIcFPb8DoaOpWKypgB7lZG.FmWv8vP.D1AJ9aXkMXq",
+    "role": "admin",
+    "createdAt": "2025-01-01T00:00:00.000Z"
+  }
+]
